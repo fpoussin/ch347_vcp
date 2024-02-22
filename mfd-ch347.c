@@ -293,8 +293,8 @@ static void ch347_write_bulk_callback(struct urb *urb)
 	/* sync/async unlink faults aren't errors */
 	if (urb->status) {
 		if (!(urb->status == -ENOENT ||
-		      urb->status == -ECONNRESET ||
-		      urb->status == -ESHUTDOWN)) {
+			  urb->status == -ECONNRESET ||
+			  urb->status == -ESHUTDOWN)) {
 			dev_err(&ch347->interface->dev,
 				"%s: Nonzero write bulk status received: %d",
 				__func__, urb->status);
@@ -324,8 +324,8 @@ static void ch347_read_bulk_callback(struct urb *urb)
 	/* sync/async unlink faults aren't errors */
 	if (urb->status) {
 		if (!(urb->status == -ENOENT ||
-		      urb->status == -ECONNRESET ||
-		      urb->status == -ESHUTDOWN)) {
+			  urb->status == -ECONNRESET ||
+			  urb->status == -ESHUTDOWN)) {
 			dev_err(&ch347->interface->dev,
 				"%s: Nonzero read bulk status received: %d",
 				__func__, urb->status);
@@ -511,8 +511,8 @@ exit:
 }
 
 int ch347_xfer(struct platform_device *pdev,
-	       const uint8_t *obuf, unsigned obuf_len,
-	       uint8_t *ibuf, unsigned ibuf_len)
+		   const uint8_t *obuf, unsigned obuf_len,
+		   uint8_t *ibuf, unsigned ibuf_len)
 {
 	int retval;
 	struct ch347_dev *ch347 = dev_get_drvdata(pdev->dev.parent);
@@ -625,19 +625,28 @@ static int ch347_probe(struct usb_interface *interface, const struct usb_device_
 	struct usb_host_interface *hostif = interface->cur_altsetting;
 	struct usb_endpoint_descriptor *epin;
 	struct usb_endpoint_descriptor *epout;
+	struct usb_endpoint_descriptor *ep;
 	struct device *dev = &interface->dev;
 	struct ch347_dev *ch347;
-	int ret;
+	int ret, i;
 
 	if (hostif->desc.bInterfaceNumber != 2 ||
-	    hostif->desc.bNumEndpoints < 2)
+		hostif->desc.bNumEndpoints < 2)
 		return -ENODEV;
 
-	epout = &hostif->endpoint[0].desc;
-	if (!usb_endpoint_is_bulk_out(epout))
-		return -ENODEV;
-	epin = &hostif->endpoint[1].desc;
-	if (!usb_endpoint_is_bulk_in(epin))
+	for (i = 0; i < hostif->desc.bNumEndpoints; ++i) {
+		ep = &hostif->endpoint[i].desc;
+
+		if (!epout && usb_endpoint_is_bulk_out(ep)) {
+			epout = ep;
+		}
+
+		if (!epin && usb_endpoint_is_bulk_in(ep)) {
+			epin = ep;
+		}
+	}
+
+	if (!epout || !epin)
 		return -ENODEV;
 
 	ch347 = kzalloc(sizeof(*ch347), GFP_KERNEL);
