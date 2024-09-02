@@ -13,3 +13,11 @@ clean:
 	$(MAKE) -C $(KERNEL_SRC) M=$(PWD) clean
 modules_install:
 	$(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules_install
+
+install:
+	mkdir -p /lib/modules/${KVERSION}/updates/
+	cp -vf ./*.ko /lib/modules/${KVERSION}/updates/
+	depmod -a
+uninstall:
+	rm -vrf /lib/modules/${KVERSION}/updates/*-ch347.ko
+	depmod -a
