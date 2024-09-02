@@ -4,6 +4,7 @@
 
 typedef enum {
 	CH347_MODE_1 = 1,
+  CH347_MODE_2 = 2,
 	CH347_MODE_3 = 3
 } ch347_mode_t;
 

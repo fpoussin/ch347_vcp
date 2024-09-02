@@ -476,6 +476,8 @@ static int ch347_spi_probe(struct platform_device *pdev)
 		return rv;
 	}
 
+  dev_info(dev, "SPI device created as %s", master->dev.init_name);
+
 	return 0;
 }
 

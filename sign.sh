@@ -7,10 +7,10 @@ SIGNING_SCRIPT_DIR="/usr/src/linux-headers-$(uname -r)"
 SIGNING_SCRIPT="./scripts/sign-file"
 
 KERNEL_MODULES=(
-  "${PWD}/gpio-ch347.ko"
-  "${PWD}/i2c-ch347.ko"
-  "${PWD}/mfd-ch347.ko"
-  "${PWD}/spi-ch347.ko"
+  "${PWD}/src/gpio-ch347.ko"
+  "${PWD}/src/i2c-ch347.ko"
+  "${PWD}/src/mfd-ch347.ko"
+  "${PWD}/src/spi-ch347.ko"
 )
 
 for mod in "${KERNEL_MODULES[@]}"; do

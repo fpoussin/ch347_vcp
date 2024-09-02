@@ -235,6 +235,8 @@ static int ch347_i2c_probe(struct platform_device *pdev)
 		return rv;
 	}
 
+  dev_info(&pdev->dev, "I2C device created as %s.", ch347->adapter.name);
+
 	rv = i2c_add_adapter(&ch347->adapter);
 	return rv;
 }

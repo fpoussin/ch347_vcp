@@ -34,6 +34,7 @@
 
 #define CH347_USB_VENDOR 0x1a86
 #define CH347_USB_DEVICE_M1 0x55db
+#define CH347_USB_DEVICE_M2 0x55dc
 #define CH347_USB_DEVICE_M3 0x55dd
 
 #define CH347_DEFAULT_TIMEOUT 1000
@@ -687,7 +688,7 @@ static int ch347_probe(struct usb_interface *interface, const struct usb_device_
 		goto out_free;
 	}
 
-	dev_info(&interface->dev, "CH347 attached");
+	dev_info(&interface->dev, "CH347 attached in mode %d", ch347->mode);
 
 	return 0;
 
@@ -732,6 +733,7 @@ static int ch347_post_reset(struct usb_interface *intf)
 
 static const struct usb_device_id ch347_table[] = {
 	{ USB_DEVICE(CH347_USB_VENDOR, CH347_USB_DEVICE_M1) }, /* mode #1 (UART + SPI + I2C + GPIO) */
+  { USB_DEVICE(CH347_USB_VENDOR, CH347_USB_DEVICE_M2) }, /* mode #2 (UART + SPI + I2C + GPIO) */
 	{ USB_DEVICE(CH347_USB_VENDOR, CH347_USB_DEVICE_M3) }, /* mode #3 (UART + JTAG + I2C + GPIO) */
 	{ }
 };
